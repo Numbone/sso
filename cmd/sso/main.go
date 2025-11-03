@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/Numbone/sso/internal/app"
 	"github.com/Numbone/sso/internal/config"
 )
 
@@ -23,11 +24,9 @@ func main() {
 		slog.Any("config", cfg),
 		slog.Int("port", cfg.GRPC.Port))
 
-	log.Debug("debug message")
+	application := app.New(log, cfg.GRPC.Port, cfg.StoragePath, cfg.TokenTTL)
 
-	log.Error("error message")
-
-	log.Warn("warn message")
+	application.GRPCSrc.MustRun()
 }
 
 func setupLogger(env string) *slog.Logger {
